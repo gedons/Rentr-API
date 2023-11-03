@@ -51,4 +51,18 @@ exports.login = (req, res, next) => {
     })(req, res, next);
   };
 
- 
+  exports.logout = (req, res) => {
+    // Destroy the user's session and log them out 
+    req.logout();
+  
+    // Clear the session cookie
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      
+      // Redirect to a success or logout page, or you can simply return a success message
+      res.status(200).json({ message: 'Logout successful' });
+    });
+  };
+  
