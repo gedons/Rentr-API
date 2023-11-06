@@ -6,6 +6,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const config = require('./config/config');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
@@ -16,6 +18,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Swagger configuration
+const swaggerOptions = {
+    swaggerDefinition: {
+      info: {
+        title: 'User Authentication API',
+        version: '1.0.0',
+      }, 
+    },
+    apis: ['./swagger.yaml'], 
+  };
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 // Configure session middleware
 app.use(
@@ -42,6 +57,7 @@ require('./config/passport-config');
 
 // Declare Routes
 app.use('/api/v1/auth', authRoutes); 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   
 
 // Start the server

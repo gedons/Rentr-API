@@ -1,0 +1,136 @@
+swagger: '2.0'
+info:
+  title: User Authentication API
+  version: 1.0.0
+paths:
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: User registered successfully
+        400:
+          description: Bad request
+        500:
+          description: Server Error
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Log in with user credentials
+      parameters:
+        - name: Credentials
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        200:
+          description: User logged in successfully
+        401:
+          description: Unauthorized
+
+  /api/v1/auth/verify/{token}:
+    get:
+      tags:
+        - Authentication
+      summary: Verify user email with a verification token
+      parameters:
+        - name: token
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Email verified successfully
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+
+  /api/v1/auth/password-reset:
+    post:
+      tags:
+        - Authentication
+      summary: Request a password reset
+      parameters:
+        - name: email
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Email'
+      responses:
+        200:
+          description: Password reset email sent successfully
+        404:
+          description: User not found
+
+  /api/v1/auth/reset/{token}:
+    post:
+      tags:
+        - Authentication
+      summary: Reset user password with a reset token
+      parameters:
+        - name: token
+          in: path
+          required: true
+          type: string
+        - name: newPassword
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewPassword'
+      responses:
+        200:
+          description: Password reset successful
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+
+definitions:
+  User:
+    type: object
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      accountType:
+        type: string
+      state:
+        type: string
+      country:
+        type: string
+      phone:
+        type: string
+      address:
+        type: string
+  Credentials:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  Email:
+    type: object
+    properties:
+      email:
+        type: string
+  NewPassword:
+    type: object
+    properties:
+      newPassword:
+        type: string
