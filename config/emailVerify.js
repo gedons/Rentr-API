@@ -1,8 +1,9 @@
 const transport = require('./emailConfig');
+const crypto = require('crypto');
 
 // Generate a random verification token (you can use a library like `crypto` to create a secure token)
 const generateVerificationToken = () => {
-    return Math.random().toString(36).slice(2);
+    return crypto.randomBytes(20).toString('hex');
 };
 
 const sendVerificationEmail = (user) => {
@@ -36,4 +37,4 @@ const sendVerificationEmail = (user) => {
     });
 };
 
-module.exports = {generateVerificationToken, sendVerificationEmail};
+module.exports = { generateVerificationToken, sendVerificationEmail };

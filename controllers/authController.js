@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { generateVerificationToken, sendVerificationEmail } = require('../config/emailVerify'); 
+const { generateResetToken, sendResetEmail } = require('../config/PasswordReset'); 
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 
@@ -102,3 +103,26 @@ exports.resendVerification = async (req, res) => {
       }
 };
   
+exports.passwordReset = async (req, res) => {
+        const { email } = req.body;
+
+        try {
+            const user = await User.findOne({ email });
+        
+            if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+            }
+        
+            const token = generateResetToken();
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+            await user.save();
+
+            sendResetEmail(user);
+
+          return res.status(200).json({ message: 'Password reset email sent' });
+        } catch (error) {
+        res.status(500).json({ message: 'Error sending password reset email' });
+        }
+
+};
