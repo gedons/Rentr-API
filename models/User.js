@@ -8,7 +8,10 @@ const userSchema = new mongoose.Schema({
   state: String,
   country: String,
   phone: String,
-  address: String
+  address: String,
+  verificationToken: String,  
+  verificationTokenExpiry: Date,
+  isEmailVerified: { type: Boolean, default: false }, 
 });
 
 module.exports = mongoose.model('User', userSchema);

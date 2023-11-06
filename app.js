@@ -40,7 +40,7 @@ require('./config/passport-config');
 
 
 
-// Declear Routes
+// Declare Routes
 app.use('/api/v1/auth', authRoutes); 
   
 
