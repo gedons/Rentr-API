@@ -27,6 +27,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.7",
@@ -36,6 +37,7 @@
     "passport-local-mongoose": "^8.0.0",
     "redis": "^4.6.10",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "vue-toast-notification": "^3.1.2"
   }
 }

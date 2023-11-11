@@ -3,6 +3,8 @@ const { generateVerificationToken, sendVerificationEmail } = require('../config/
 const { generateResetToken, sendResetEmail } = require('../config/PasswordReset'); 
 const passport = require('passport');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 
 exports.register = async (req, res) => {
   const { username, email, password, accountType, state, country, phone, address } = req.body;
@@ -35,7 +37,7 @@ exports.register = async (req, res) => {
   try {
     await newUser.save();
     sendVerificationEmail(newUser);
-    res.status(201).json({ message: 'Registration successful' });
+    res.status(201).json({ message: 'Registration successful'});
   } catch (error) {
     res.status(500).json({ message: `Registration failed : ${error}` });
   }
@@ -52,11 +54,16 @@ exports.login = (req, res, next) => {
       if (!user.isEmailVerified) {
         return res.status(401).json({ message: 'Email is not verified' });
       }
+
+      // Generate an authentication token
+     const authToken = jwt.sign({ userId: user._id }, config.SESSION_SECRET, { expiresIn: '1h' });
+
       req.logIn(user, (loginErr) => {
         if (loginErr) {
           return res.status(500).json({ message: 'Server error', loginErr });
         }
-        return res.status(200).json({ message: 'Login successful' });
+        // Return the user data and authToken in the response
+        return res.status(200).json({ user, authToken });
       });
     })(req, res, next);
 };
